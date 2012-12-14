@@ -26,13 +26,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener, ChangeLi
     private int velocidad = 5;
 
     public VentanaPrincipal() {
+        
         super("Torres de Hanoi ");
         configurarVentana();
         inicializarComponentes();
-        this.setVisible(true);
     }
 
     private void configurarVentana() {
+        
         this.setSize(680, 450);
         this.setVisible(true);
         this.setLayout(new BorderLayout());
@@ -77,6 +78,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, ChangeLi
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (botonIniciar.getText().equals("Pausar")) {
             dibujo.pausarAnimacion();
@@ -95,6 +97,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener, ChangeLi
         }
     }
 
+    @Override
     public void stateChanged(ChangeEvent e) {
         
         if (e.getSource() == spinnerVelocidad) {

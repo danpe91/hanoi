@@ -13,60 +13,59 @@ import javax.swing.JPanel;
 
 public class Dibujo extends JPanel implements ActionListener {
 
-    private int nroFichas;
-    private int[] topes;
-    private int movimientoActual;
-    private Image[] fichas;
-    private int x, y;
-    private int ficha;
-    private int nm;
-    private Movimiento[] movimientos;
-    private Posicion[] posiciones;
-    private Timer timer;
-    private boolean movimientoCompletado;
-    private int paso;
-    private int speed;
-    private static final int VELOCIDAD = 1;
     private static final int LIMITE_FICHAS = 8;
     private static final int LIMITE_TORRES = 3;
+    private static final int VELOCIDAD = 1;
     private VentanaPrincipal nucleo;
+    private Timer timer;
+    private Movimiento[] movimientos;
+    private Posicion[] posiciones;
+    private Image[] fichas;
+    private boolean movimientoCompletado;
+    private int movimientoActual;
+    private int velocidad;
+    private int noFichas;
+    private int ficha;
+    private int paso;
+    private int nm;
+    private int x;
+    private int y;
+    private int[] topes;
 
     public Dibujo(int nroFichas, int speed, VentanaPrincipal nucleo) {
-        this.nroFichas = nroFichas;
-        this.speed = speed;
+
+        this.noFichas = nroFichas;
+        this.velocidad = speed;
         this.nucleo = nucleo;
-        configurarPanel();
-        inicializarComponentes();
-        inicializarComponentesDeAnimacion();
+        
+        initComponentes();
+        initComponentesAnimacion();
         timer = new Timer(VELOCIDAD, this);
     }
 
-    private void configurarPanel() {
-        setDoubleBuffered(true);
-        setBackground(this.getBackground());
-    }
+    private void initComponentes() {
 
-    private void inicializarComponentes() {
         fichas = new Image[LIMITE_FICHAS + 1];
         for (int i = 1; i <= LIMITE_FICHAS; i++) {
-            ImageIcon ii = new ImageIcon(this.getClass().getResource("/imagenes/" + i + ".png"));
+            ImageIcon ii = new ImageIcon(this.getClass().getResource("/images/" + i + ".png"));
             fichas[i] = ii.getImage();
         }
     }
 
-    private void inicializarComponentesDeAnimacion() {
+    private void initComponentesAnimacion() {
+
         nm = 0;
         topes = new int[LIMITE_TORRES + 1];
-        topes[1] = nroFichas;
+        topes[1] = noFichas;
         topes[2] = 0;
         topes[3] = 0;
         ficha = 1;
-        movimientos = new Movimiento[(int) Math.pow(2, nroFichas)];
-        algoritmoHanoi(nroFichas, 1, 2, 3); // llena el vector de movimientos
+        movimientos = new Movimiento[(int) Math.pow(2, noFichas)];
+        algoritmoHanoi(noFichas, 1, 2, 3);
         posiciones = new Posicion[9];
-        for (int i = 1; i <= nroFichas; i++) {
-            int w = nroFichas - i + 1;
-            posiciones[i] = new Posicion(posicionXFicha(i, 1), posicionYFicha(w));
+        for (int i = 1; i <= noFichas; i++) {
+            int w = noFichas - i + 1;
+            posiciones[i] = new Posicion(posicionFichaX(i, 1), posicionFichaY(w));
         }
         x = posiciones[1].getX();
         y = posiciones[1].getY();
@@ -75,25 +74,31 @@ public class Dibujo extends JPanel implements ActionListener {
         paso = 1;
     }
 
+    @Override
     public void paint(Graphics g) {
+
         super.paint(g);
-        Graphics2D g2 = (Graphics2D) g;
-        for (int i = nroFichas; i >= 1; i--) {
-            g2.drawImage(fichas[i], posiciones[i].getX(), posiciones[i].getY(), this);
+        g.setColor(Color.RED);
+        g.drawRect(25, 30, 625, 40);
+        g.setColor(Color.BLUE);
+        g.drawRect(25, 70, 625, 300);
+        for (int i = noFichas; i >= 1; i--) {
+            g.drawImage(fichas[i], posiciones[i].getX(), posiciones[i].getY(), this);
         }
-        
+
         g.setColor(Color.RED);
         g.setFont(new java.awt.Font("Bitstream Charter", 1, 16));
-        g2.drawString("Origen", 115, 350);
+        g.drawString("Origen", 115, 350);
         g.setColor(Color.BLUE);
-        g2.drawString("Auxiliar", 315, 350);
+        g.drawString("Auxiliar", 315, 350);
         g.setColor(Color.GREEN);
-        g2.drawString("Destino", 515, 350);
+        g.drawString("Destino", 515, 350);
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
 
     public void algoritmoHanoi(int n, int origen, int temporal, int destino) {
+
         if (n == 0) {
             return;
         }
@@ -103,41 +108,42 @@ public class Dibujo extends JPanel implements ActionListener {
         algoritmoHanoi(n - 1, temporal, origen, destino);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        
+
         switch (paso) {
-            case 1: // mover hacia arriba
-                if (y > 30) { // 30 es el maximo a elevar la ficha
-                    y-=speed;
+            case 1:
+                if (y > 30) {
+                    y -= velocidad;
                     posiciones[ficha].setY(y);
                 } else {
                     if (movimientos[movimientoActual].getTorreOrigen() < movimientos[movimientoActual].getTorreDestino()) {
-                        paso = 2; // mover a la derecha
+                        paso = 2;
                     } else {
-                        paso = 3; // mover a la izquierda
+                        paso = 3;
                     }
                 }
                 break;
-            case 2: // mover hacia derecha
-                if (x < posicionXFicha(ficha, movimientos[movimientoActual].getTorreDestino())) { // recorre hasta la torre destino
-                    x+=speed;
+            case 2:
+                if (x < posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) { // recorre hasta la torre destino
+                    x += velocidad;
                     posiciones[ficha].setX(x);
                 } else {
                     paso = 4;
                 }
                 break;
-            case 3: // mover hacia izquierda
-                if (x > posicionXFicha(ficha, movimientos[movimientoActual].getTorreDestino())) { // recorre hasta la torre destino
-                    x-=speed;
+            case 3:
+                if (x > posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) { // recorre hasta la torre destino
+                    x -= velocidad;
                     posiciones[ficha].setX(x);
                 } else {
                     paso = 4;
                 }
                 break;
-            case 4: // mover hacia abajo
+            case 4:
                 int nivel = topes[movimientos[movimientoActual].getTorreDestino()] + 1;
-                if (y < posicionYFicha(nivel)) {
-                    y+=speed;
+                if (y < posicionFichaY(nivel)) {
+                    y += velocidad;
                     posiciones[ficha].setY(y);
                 } else {
                     movimientoCompletado = true;
@@ -149,7 +155,7 @@ public class Dibujo extends JPanel implements ActionListener {
             topes[movimientos[movimientoActual].getTorreDestino()]++;
             topes[movimientos[movimientoActual].getTorreOrigen()]--;
             movimientoActual++;
-            if (movimientoActual == (int) Math.pow(2, nroFichas)) {
+            if (movimientoActual == (int) Math.pow(2, noFichas)) {
                 timer.stop();
                 nucleo.resolucionCompletada();
             } else {
@@ -162,7 +168,8 @@ public class Dibujo extends JPanel implements ActionListener {
         repaint();
     }
 
-    public static int posicionXFicha(int ficha, int torre) {
+    public int posicionFichaX(int ficha, int torre) {
+
         int k = (torre - 1) * 200;
         switch (ficha) {
             case 1:
@@ -185,33 +192,27 @@ public class Dibujo extends JPanel implements ActionListener {
         return 0;
     }
 
-    public static int posicionYFicha(int nivel) {
-        switch (nivel) {
-            case 1:
-                return 260;
-            case 2:
-                return 233;
-            case 3:
-                return 206;
-            case 4:
-                return 179;
-            case 5:
-                return 152;
-            case 6:
-                return 125;
-            case 7:
-                return 98;
-            case 8:
-                return 71;
-        }
-        return 0;
+    public int posicionFichaY(int nivel) {
+
+        return nivel == 1 ? 260
+                : nivel == 2 ? 233
+                : nivel == 3 ? 206
+                : nivel == 4 ? 179
+                : nivel == 5 ? 152
+                : nivel == 6 ? 125
+                : nivel == 7 ? 98
+                : nivel == 8 ? 71
+                : 0;
+
     }
 
     public void iniciarAnimacion() {
+
         timer.restart();
     }
 
     public void pausarAnimacion() {
+
         timer.stop();
     }
 }
