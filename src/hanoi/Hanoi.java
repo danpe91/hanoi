@@ -2,7 +2,6 @@ package hanoi;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -11,12 +10,16 @@ import javax.swing.Timer;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-public class Dibujo extends JPanel implements ActionListener {
+/*
+ * Clase que implemente la funcionalidad del algoritmo para el acomodo de
+ * torres de Hanoi asi como las animaciones necesarias.
+ */
+public class Hanoi extends JPanel implements ActionListener {
 
     private static final int LIMITE_FICHAS = 8;
     private static final int LIMITE_TORRES = 3;
     private static final int VELOCIDAD = 1;
-    private VentanaPrincipal nucleo;
+    private MainFrame mainFrame;
     private Timer timer;
     private Movimiento[] movimientos;
     private Posicion[] posiciones;
@@ -30,13 +33,13 @@ public class Dibujo extends JPanel implements ActionListener {
     private int nm;
     private int x;
     private int y;
-    private int[] topes;
+    private int[] fichasEnTorre;
 
-    public Dibujo(int nroFichas, int speed, VentanaPrincipal nucleo) {
+    public Hanoi(int noFichas, int speed, MainFrame mainFrame) {
 
-        this.noFichas = nroFichas;
+        this.noFichas = noFichas;
         this.velocidad = speed;
-        this.nucleo = nucleo;
+        this.mainFrame = mainFrame;
         
         initComponentes();
         initComponentesAnimacion();
@@ -55,10 +58,10 @@ public class Dibujo extends JPanel implements ActionListener {
     private void initComponentesAnimacion() {
 
         nm = 0;
-        topes = new int[LIMITE_TORRES + 1];
-        topes[1] = noFichas;
-        topes[2] = 0;
-        topes[3] = 0;
+        fichasEnTorre = new int[LIMITE_TORRES + 1];
+        fichasEnTorre[1] = noFichas;
+        fichasEnTorre[2] = 0;
+        fichasEnTorre[3] = 0;
         ficha = 1;
         movimientos = new Movimiento[(int) Math.pow(2, noFichas)];
         algoritmoHanoi(noFichas, 1, 2, 3);
@@ -110,7 +113,7 @@ public class Dibujo extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        
         switch (paso) {
             case 1:
                 if (y > 30) {
@@ -125,7 +128,7 @@ public class Dibujo extends JPanel implements ActionListener {
                 }
                 break;
             case 2:
-                if (x < posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) { // recorre hasta la torre destino
+                if (x < posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) {
                     x += velocidad;
                     posiciones[ficha].setX(x);
                 } else {
@@ -133,7 +136,7 @@ public class Dibujo extends JPanel implements ActionListener {
                 }
                 break;
             case 3:
-                if (x > posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) { // recorre hasta la torre destino
+                if (x > posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) {
                     x -= velocidad;
                     posiciones[ficha].setX(x);
                 } else {
@@ -141,7 +144,7 @@ public class Dibujo extends JPanel implements ActionListener {
                 }
                 break;
             case 4:
-                int nivel = topes[movimientos[movimientoActual].getTorreDestino()] + 1;
+                int nivel = fichasEnTorre[movimientos[movimientoActual].getTorreDestino()] + 1;
                 if (y < posicionFichaY(nivel)) {
                     y += velocidad;
                     posiciones[ficha].setY(y);
@@ -152,12 +155,12 @@ public class Dibujo extends JPanel implements ActionListener {
         }
         if (movimientoCompletado) {
             paso = 1;
-            topes[movimientos[movimientoActual].getTorreDestino()]++;
-            topes[movimientos[movimientoActual].getTorreOrigen()]--;
+            fichasEnTorre[movimientos[movimientoActual].getTorreDestino()]++;
+            fichasEnTorre[movimientos[movimientoActual].getTorreOrigen()]--;
             movimientoActual++;
             if (movimientoActual == (int) Math.pow(2, noFichas)) {
                 timer.stop();
-                nucleo.resolucionCompletada();
+                mainFrame.resolucionCompletada();
             } else {
                 movimientoCompletado = false;
                 ficha = movimientos[movimientoActual].getFicha();

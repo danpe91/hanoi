@@ -3,6 +3,7 @@
 
 # netbeans files
 nbproject/private/
+nbproject/*
 
 # generic files
 *~
