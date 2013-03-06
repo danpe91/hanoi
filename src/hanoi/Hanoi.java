@@ -115,7 +115,7 @@ public class Hanoi extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
         switch (paso) {
-            case 1:
+            case 1:         // Movimiento hacia arriba
                 if (y > 30) {
                     y -= velocidad;
                     posiciones[ficha].setY(y);
@@ -127,7 +127,7 @@ public class Hanoi extends JPanel implements ActionListener {
                     }
                 }
                 break;
-            case 2:
+            case 2:         // Movimiento hacia derecha
                 if (x < posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) {
                     x += velocidad;
                     posiciones[ficha].setX(x);
@@ -135,7 +135,7 @@ public class Hanoi extends JPanel implements ActionListener {
                     paso = 4;
                 }
                 break;
-            case 3:
+            case 3:         // Movimiento hacia izquierda
                 if (x > posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) {
                     x -= velocidad;
                     posiciones[ficha].setX(x);
@@ -143,7 +143,7 @@ public class Hanoi extends JPanel implements ActionListener {
                     paso = 4;
                 }
                 break;
-            case 4:
+            case 4:         // Movimiento hacia abajo
                 int nivel = fichasEnTorre[movimientos[movimientoActual].getTorreDestino()] + 1;
                 if (y < posicionFichaY(nivel)) {
                     y += velocidad;
