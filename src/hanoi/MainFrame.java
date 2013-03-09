@@ -21,17 +21,21 @@ import javax.swing.event.ChangeListener;
  */
 public class MainFrame extends JFrame {
 
+    public static final int SOLUTIONER_MODE = 0;
+    public static final int INTERACTIVE_MODE = 1;
     private final int VELOCIDAD = 10;
+    private int gameMode;
     private JSpinner spinnerNroDiscos;
     private JLabel labelInformacion;
     private JLabel labelNroDiscos;
     private JButton botonIniciar;
     private MainPanel hanoiPanel;
 
-    public MainFrame() {
+    public MainFrame(int gameMode) {
 
         super("Inteligencia Artificial - Proyecto: Torres de Hanoi ");
-        
+
+        this.gameMode = gameMode;
         configurarVentana();
         inicializarComponentes();
     }
@@ -73,36 +77,41 @@ public class MainFrame extends JFrame {
         panelInferior.add(spinnerNroDiscos);
 
         botonIniciar = new JButton("Iniciar");
-        botonIniciar.addActionListener(new ActionListener() {
+        if (gameMode == SOLUTIONER_MODE) {
+            botonIniciar.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent ae) {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
 
-                if (botonIniciar.getText().equals("Pausar")) {
-                    
-                    hanoiPanel.pausarAnimacion();
-                    botonIniciar.setText("Continuar");
-                    spinnerNroDiscos.setEnabled(true);
-                } else {
-                    
-                    if (botonIniciar.getText().equals("Iniciar De Nuevo")) {
-                        
-                        initializeDibujo();
-                        add(hanoiPanel, BorderLayout.CENTER);
-                        botonIniciar.setText("Iniciar");
-                        labelInformacion.setVisible(true);
-                        mainSetVisible(true);
+                    if (botonIniciar.getText().equals("Pausar")) {
+
+                        hanoiPanel.pausarAnimacion();
+                        botonIniciar.setText("Continuar");
                         spinnerNroDiscos.setEnabled(true);
                     } else {
-                        
-                        hanoiPanel.iniciarAnimacion();
-                        botonIniciar.setText("Pausar");
-                        spinnerNroDiscos.setEnabled(false);
-                    }
-                }
 
-            }
-        });
+                        if (botonIniciar.getText().equals("Iniciar De Nuevo")) {
+
+                            initializeDibujo();
+                            add(hanoiPanel, BorderLayout.CENTER);
+                            botonIniciar.setText("Iniciar");
+                            labelInformacion.setVisible(true);
+                            mainSetVisible(true);
+                            spinnerNroDiscos.setEnabled(true);
+                        } else {
+
+                            hanoiPanel.iniciarAnimacion();
+                            botonIniciar.setText("Pausar");
+                            spinnerNroDiscos.setEnabled(false);
+                        }
+                    }
+
+                }
+            });
+        } else {
+            
+        }
+        
         panelInferior.add(botonIniciar);
 
         labelInformacion = new JLabel("Terminado!");
@@ -112,7 +121,10 @@ public class MainFrame extends JFrame {
 
 
         add(panelInferior, BorderLayout.SOUTH);
-        hanoiPanel = new HanoiPanel(8, VELOCIDAD, this);
+        hanoiPanel = (gameMode == SOLUTIONER_MODE)
+                ? new HanoiPanel(8, VELOCIDAD, this)
+                : new InteractivePanel(8, VELOCIDAD, this);
+
         add(hanoiPanel, BorderLayout.CENTER);
 
         getRootPane().setDefaultButton(botonIniciar);
@@ -127,7 +139,9 @@ public class MainFrame extends JFrame {
 
     private void initializeDibujo() {
 
-        hanoiPanel = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this);
+        hanoiPanel = (gameMode == SOLUTIONER_MODE)
+                ? new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this)
+                : new InteractivePanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this);
     }
 
     private void mainSetVisible(boolean flag) {

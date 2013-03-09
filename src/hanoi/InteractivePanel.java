@@ -2,12 +2,10 @@ package hanoi;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
-import javax.swing.ImageIcon;
 
 /*
  * Clase que implemente la funcionalidad del algoritmo para el acomodo de
@@ -16,7 +14,7 @@ import javax.swing.ImageIcon;
 public class InteractivePanel extends MainPanel {
 
     private Timer timer;
-    private Movimiento[] movimientos;
+    private Movimiento movimiento;
     private Posicion[] posiciones;
     private boolean movimientoCompletado;
     private int movimientoActual;
@@ -45,7 +43,7 @@ public class InteractivePanel extends MainPanel {
                             y -= velocidad;
                             posiciones[ficha].setY(y);
                         } else {
-                            if (movimientos[movimientoActual].getTorreOrigen() < movimientos[movimientoActual].getTorreDestino()) {
+                            if (movimiento.getTorreOrigen() < movimiento.getTorreDestino()) {
                                 paso = 2;
                             } else {
                                 paso = 3;
@@ -53,7 +51,7 @@ public class InteractivePanel extends MainPanel {
                         }
                         break;
                     case 2:         // Movimiento hacia derecha
-                        if (x < posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) {
+                        if (x < posicionFichaX(ficha, movimiento.getTorreDestino())) {
                             x += velocidad;
                             posiciones[ficha].setX(x);
                         } else {
@@ -61,7 +59,7 @@ public class InteractivePanel extends MainPanel {
                         }
                         break;
                     case 3:         // Movimiento hacia izquierda
-                        if (x > posicionFichaX(ficha, movimientos[movimientoActual].getTorreDestino())) {
+                        if (x > posicionFichaX(ficha, movimiento.getTorreDestino())) {
                             x -= velocidad;
                             posiciones[ficha].setX(x);
                         } else {
@@ -69,7 +67,7 @@ public class InteractivePanel extends MainPanel {
                         }
                         break;
                     case 4:         // Movimiento hacia abajo
-                        int nivel = fichasEnTorre[movimientos[movimientoActual].getTorreDestino()] + 1;
+                        int nivel = fichasEnTorre[movimiento.getTorreDestino()] + 1;
                         if (y < posicionFichaY(nivel)) {
                             y += velocidad;
                             posiciones[ficha].setY(y);
@@ -80,15 +78,15 @@ public class InteractivePanel extends MainPanel {
                 }
                 if (movimientoCompletado) {
                     paso = 1;
-                    fichasEnTorre[movimientos[movimientoActual].getTorreDestino()]++;
-                    fichasEnTorre[movimientos[movimientoActual].getTorreOrigen()]--;
+                    fichasEnTorre[movimiento.getTorreDestino()]++;
+                    fichasEnTorre[movimiento.getTorreOrigen()]--;
                     movimientoActual++;
                     if (movimientoActual == (int) Math.pow(2, noFichas)) {
                         timer.stop();
                         mainFrame.resolucionCompletada();
                     } else {
                         movimientoCompletado = false;
-                        ficha = movimientos[movimientoActual].getFicha();
+                        ficha = movimiento.getFicha();
                         x = posiciones[ficha].getX();
                         y = posiciones[ficha].getY();
                     }
@@ -106,8 +104,7 @@ public class InteractivePanel extends MainPanel {
         fichasEnTorre[2] = 0;
         fichasEnTorre[3] = 0;
         ficha = 1;
-        movimientos = new Movimiento[(int) Math.pow(2, noFichas)];
-        algoritmoHanoi(noFichas, 1, 2, 3);
+        //movimiento = new Movimiento[(int) Math.pow(2, noFichas)];
         posiciones = new Posicion[9];
         for (int i = 1; i <= noFichas; i++) {
             int w = noFichas - i + 1;
@@ -141,17 +138,6 @@ public class InteractivePanel extends MainPanel {
         g.drawString("Destino", 515, 350);
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
-    }
-
-    public void algoritmoHanoi(int n, int origen, int temporal, int destino) {
-
-        if (n == 0) {
-            return;
-        }
-        algoritmoHanoi(n - 1, origen, destino, temporal);
-        nm++;
-        movimientos[nm] = new Movimiento(n, origen, destino);
-        algoritmoHanoi(n - 1, temporal, origen, destino);
     }
 
     @Override

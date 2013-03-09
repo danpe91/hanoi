@@ -58,13 +58,13 @@ public class Menu extends javax.swing.JFrame {
 private void hanoiSolutionerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hanoiSolutionerButtonActionPerformed
 
     dispose();
-    new MainFrame().setVisible(true);
+    new MainFrame(MainFrame.SOLUTIONER_MODE).setVisible(true);
 }//GEN-LAST:event_hanoiSolutionerButtonActionPerformed
 
 private void hanoiInteractiveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hanoiInteractiveButtonActionPerformed
 
-    // dispose();
-    // new MainFrame().setVisible(true);
+    dispose();
+    new MainFrame(MainFrame.INTERACTIVE_MODE).setVisible(true);
 }//GEN-LAST:event_hanoiInteractiveButtonActionPerformed
 
     private void setLookAndFeel() {

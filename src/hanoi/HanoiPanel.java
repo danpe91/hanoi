@@ -2,12 +2,10 @@ package hanoi;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
-import javax.swing.ImageIcon;
 
 /*
  * Clase que implemente la funcionalidad del algoritmo para el acomodo de
