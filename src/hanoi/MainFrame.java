@@ -19,14 +19,14 @@ import javax.swing.event.ChangeListener;
  * para el funcionamiento e implementa algunos eventos necesarios 
  * para el funcionamiento
  */
-public class MainFrame extends JFrame implements ActionListener {
+public class MainFrame extends JFrame {
 
     private final int VELOCIDAD = 10;
     private JSpinner spinnerNroDiscos;
     private JLabel labelInformacion;
     private JLabel labelNroDiscos;
     private JButton botonIniciar;
-    private HanoiPanel dibujo;
+    private HanoiPanel hanoiPanel;
 
     public MainFrame() {
 
@@ -58,19 +58,50 @@ public class MainFrame extends JFrame implements ActionListener {
             @Override
             public void stateChanged(ChangeEvent ce) {
 
-                dibujo.pausarAnimacion();
+                hanoiPanel.pausarAnimacion();
                 botonIniciar.setText("Iniciar");
                 labelInformacion.setVisible(false);
                 initializeDibujo();
-                add(dibujo, BorderLayout.CENTER);
+                remove(hanoiPanel);
+                add(hanoiPanel, BorderLayout.CENTER);
                 mainSetVisible(true);
 
             }
         });
+
         panelInferior.add(spinnerNroDiscos);
 
         botonIniciar = new JButton("Iniciar");
-        botonIniciar.addActionListener(this);
+        botonIniciar.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+
+                if (botonIniciar.getText().equals("Pausar")) {
+                    
+                    hanoiPanel.pausarAnimacion();
+                    botonIniciar.setText("Continuar");
+                    spinnerNroDiscos.setEnabled(true);
+                } else {
+                    
+                    if (botonIniciar.getText().equals("Iniciar De Nuevo")) {
+                        
+                        initializeDibujo();
+                        add(hanoiPanel, BorderLayout.CENTER);
+                        botonIniciar.setText("Iniciar");
+                        labelInformacion.setVisible(true);
+                        mainSetVisible(true);
+                        spinnerNroDiscos.setEnabled(true);
+                    } else {
+                        
+                        hanoiPanel.iniciarAnimacion();
+                        botonIniciar.setText("Pausar");
+                        spinnerNroDiscos.setEnabled(false);
+                    }
+                }
+
+            }
+        });
         panelInferior.add(botonIniciar);
 
         labelInformacion = new JLabel("Terminado!");
@@ -80,31 +111,11 @@ public class MainFrame extends JFrame implements ActionListener {
 
 
         add(panelInferior, BorderLayout.SOUTH);
-        dibujo = new HanoiPanel(8, VELOCIDAD, this);
-        add(dibujo, BorderLayout.CENTER);
+        hanoiPanel = new HanoiPanel(8, VELOCIDAD, this);
+        add(hanoiPanel, BorderLayout.CENTER);
 
         getRootPane().setDefaultButton(botonIniciar);
 
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-        if (botonIniciar.getText().equals("Pausar")) {
-            dibujo.pausarAnimacion();
-            botonIniciar.setText("Continuar");
-        } else {
-            if (botonIniciar.getText().equals("Iniciar De Nuevo")) {
-                initializeDibujo();
-                add(dibujo, BorderLayout.CENTER);
-                botonIniciar.setText("Iniciar");
-                labelInformacion.setVisible(true);
-                this.setVisible(true);
-            } else {
-                dibujo.iniciarAnimacion();
-                botonIniciar.setText("Pausar");
-            }
-        }
     }
 
     public void resolucionCompletada() {
@@ -115,12 +126,11 @@ public class MainFrame extends JFrame implements ActionListener {
 
     private void initializeDibujo() {
 
-        dibujo = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this);
+        hanoiPanel = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this);
     }
 
     private void mainSetVisible(boolean flag) {
-    
+
         setVisible(flag);
     }
-    
 }
