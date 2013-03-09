@@ -64,7 +64,7 @@ private void hanoiSolutionerButtonActionPerformed(java.awt.event.ActionEvent evt
 private void hanoiInteractiveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hanoiInteractiveButtonActionPerformed
 
     // dispose();
-    // new InteractiveFrame().setVisible(true);
+    // new MainFrame().setVisible(true);
 }//GEN-LAST:event_hanoiInteractiveButtonActionPerformed
 
     private void setLookAndFeel() {

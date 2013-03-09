@@ -13,7 +13,7 @@ import javax.swing.ImageIcon;
  * Clase que implemente la funcionalidad del algoritmo para el acomodo de
  * torres de HanoiPanel asi como las animaciones necesarias.
  */
-public class HanoiPanel extends MainPanel {
+public class InteractivePanel extends MainPanel {
 
     private Timer timer;
     private Movimiento[] movimientos;
@@ -27,7 +27,7 @@ public class HanoiPanel extends MainPanel {
     private int y;
     private int[] fichasEnTorre;
 
-    public HanoiPanel(final int noFichas, final int speed, final MainFrame mainFrame) {
+    public InteractivePanel(final int noFichas, final int speed, final MainFrame mainFrame) {
 
         this.noFichas = noFichas;
         this.velocidad = speed;

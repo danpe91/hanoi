@@ -26,11 +26,12 @@ public class MainFrame extends JFrame {
     private JLabel labelInformacion;
     private JLabel labelNroDiscos;
     private JButton botonIniciar;
-    private HanoiPanel hanoiPanel;
+    private MainPanel hanoiPanel;
 
     public MainFrame() {
 
         super("Inteligencia Artificial - Proyecto: Torres de Hanoi ");
+        
         configurarVentana();
         inicializarComponentes();
     }
