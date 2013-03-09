@@ -27,7 +27,7 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
     private JLabel labelNroDiscos;
     private JLabel labelVelocidad;
     private JButton botonIniciar;
-    private Hanoi dibujo;
+    private HanoiPanel dibujo;
     private int velocidad = 5;
 
     public MainFrame() {
@@ -76,7 +76,7 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
 
 
         add(panelInferior, BorderLayout.SOUTH);
-        dibujo = new Hanoi(8, velocidad, this);
+        dibujo = new HanoiPanel(8, velocidad, this);
         add(dibujo, BorderLayout.CENTER);
 
         getRootPane().setDefaultButton(botonIniciar);
@@ -91,10 +91,10 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
             botonIniciar.setText("Continuar");
         } else {
             if (botonIniciar.getText().equals("Iniciar De Nuevo")) {
-                dibujo = new Hanoi(Integer.parseInt(spinnerNroDiscos.getValue().toString()), velocidad, this);
+                dibujo = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), velocidad, this);
                 add(dibujo, BorderLayout.CENTER);
                 botonIniciar.setText("Iniciar");
-                labelInformacion.setVisible(false);
+                labelInformacion.setVisible(true);
                 this.setVisible(true);
             } else {
                 dibujo.iniciarAnimacion();
@@ -114,13 +114,19 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
         dibujo.pausarAnimacion();
         botonIniciar.setText("Iniciar");
         labelInformacion.setVisible(false);
-        dibujo = new Hanoi(Integer.parseInt(spinnerNroDiscos.getValue().toString()), velocidad, this);
+        dibujo = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), velocidad, this);
         add(dibujo, BorderLayout.CENTER);
         this.setVisible(true);
     }
 
     public void resolucionCompletada() {
+        
         botonIniciar.setText("Iniciar De Nuevo");
         labelInformacion.setVisible(true);
+    }
+    
+    public String toString() {
+        
+        return "MainFrame";
     }
 }

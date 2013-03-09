@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 
 /*
  * Clase que implemente la funcionalidad del algoritmo para el acomodo de
- * torres de Hanoi asi como las animaciones necesarias.
+ * torres de HanoiPanel asi como las animaciones necesarias.
  */
-public class Hanoi extends JPanel implements ActionListener {
+public class HanoiPanel extends JPanel implements ActionListener {
 
     private static final int LIMITE_FICHAS = 8;
     private static final int LIMITE_TORRES = 3;
@@ -35,7 +35,7 @@ public class Hanoi extends JPanel implements ActionListener {
     private int y;
     private int[] fichasEnTorre;
 
-    public Hanoi(int noFichas, int speed, MainFrame mainFrame) {
+    public HanoiPanel(int noFichas, int speed, MainFrame mainFrame) {
 
         this.noFichas = noFichas;
         this.velocidad = speed;
@@ -160,7 +160,7 @@ public class Hanoi extends JPanel implements ActionListener {
             movimientoActual++;
             if (movimientoActual == (int) Math.pow(2, noFichas)) {
                 timer.stop();
-                mainFrame.resolucionCompletada();
+                //mainFrame.resolucionCompletada();
             } else {
                 movimientoCompletado = false;
                 ficha = movimientos[movimientoActual].getFicha();
