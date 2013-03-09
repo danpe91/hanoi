@@ -19,16 +19,14 @@ import javax.swing.event.ChangeListener;
  * para el funcionamiento e implementa algunos eventos necesarios 
  * para el funcionamiento
  */
-public class MainFrame extends JFrame implements ActionListener, ChangeListener {
+public class MainFrame extends JFrame implements ActionListener {
 
+    private final int VELOCIDAD = 10;
     private JSpinner spinnerNroDiscos;
-    private JSpinner spinnerVelocidad;
     private JLabel labelInformacion;
     private JLabel labelNroDiscos;
-    private JLabel labelVelocidad;
     private JButton botonIniciar;
     private HanoiPanel dibujo;
-    private int velocidad = 5;
 
     public MainFrame() {
 
@@ -55,15 +53,21 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
         panelInferior.add(labelNroDiscos);
 
         spinnerNroDiscos = new JSpinner(new SpinnerNumberModel(8, 1, 8, 1));
-        spinnerNroDiscos.addChangeListener(this);
+        spinnerNroDiscos.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent ce) {
+
+                dibujo.pausarAnimacion();
+                botonIniciar.setText("Iniciar");
+                labelInformacion.setVisible(false);
+                initializeDibujo();
+                add(dibujo, BorderLayout.CENTER);
+                mainSetVisible(true);
+
+            }
+        });
         panelInferior.add(spinnerNroDiscos);
-
-        labelVelocidad = new JLabel("               Velocidad");
-        panelInferior.add(labelVelocidad);
-
-        spinnerVelocidad = new JSpinner(new SpinnerNumberModel(5, 1, 20, 1));
-        spinnerVelocidad.addChangeListener(this);
-        panelInferior.add(spinnerVelocidad);
 
         botonIniciar = new JButton("Iniciar");
         botonIniciar.addActionListener(this);
@@ -76,7 +80,7 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
 
 
         add(panelInferior, BorderLayout.SOUTH);
-        dibujo = new HanoiPanel(8, velocidad, this);
+        dibujo = new HanoiPanel(8, VELOCIDAD, this);
         add(dibujo, BorderLayout.CENTER);
 
         getRootPane().setDefaultButton(botonIniciar);
@@ -91,7 +95,7 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
             botonIniciar.setText("Continuar");
         } else {
             if (botonIniciar.getText().equals("Iniciar De Nuevo")) {
-                dibujo = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), velocidad, this);
+                initializeDibujo();
                 add(dibujo, BorderLayout.CENTER);
                 botonIniciar.setText("Iniciar");
                 labelInformacion.setVisible(true);
@@ -103,30 +107,20 @@ public class MainFrame extends JFrame implements ActionListener, ChangeListener 
         }
     }
 
-    @Override
-    public void stateChanged(ChangeEvent e) {
-
-        if (e.getSource() == spinnerVelocidad) {
-
-            velocidad = (Integer) spinnerVelocidad.getValue();
-        }
-
-        dibujo.pausarAnimacion();
-        botonIniciar.setText("Iniciar");
-        labelInformacion.setVisible(false);
-        dibujo = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), velocidad, this);
-        add(dibujo, BorderLayout.CENTER);
-        this.setVisible(true);
-    }
-
     public void resolucionCompletada() {
-        
+
         botonIniciar.setText("Iniciar De Nuevo");
         labelInformacion.setVisible(true);
     }
-    
-    public String toString() {
-        
-        return "MainFrame";
+
+    private void initializeDibujo() {
+
+        dibujo = new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this);
     }
+
+    private void mainSetVisible(boolean flag) {
+    
+        setVisible(flag);
+    }
+    
 }

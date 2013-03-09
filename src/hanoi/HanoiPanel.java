@@ -160,7 +160,7 @@ public class HanoiPanel extends JPanel implements ActionListener {
             movimientoActual++;
             if (movimientoActual == (int) Math.pow(2, noFichas)) {
                 timer.stop();
-                //mainFrame.resolucionCompletada();
+                mainFrame.resolucionCompletada();
             } else {
                 movimientoCompletado = false;
                 ficha = movimientos[movimientoActual].getFicha();
