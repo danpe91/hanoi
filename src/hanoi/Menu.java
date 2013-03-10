@@ -3,7 +3,9 @@ package hanoi;
 public class Menu extends javax.swing.JFrame {
 
     public Menu() {
-
+        
+        super("Menu");
+        
         setLookAndFeel();
         initComponents();
     }
@@ -17,6 +19,7 @@ public class Menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        hanoiSolutionerButton.setMnemonic('a');
         hanoiSolutionerButton.setText("Automático");
         hanoiSolutionerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -24,6 +27,7 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        hanoiInteractiveButton.setMnemonic('i');
         hanoiInteractiveButton.setText("Interactivo");
         hanoiInteractiveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -54,6 +54,14 @@ public class MainFrame extends JFrame {
 
         JPanel panelInferior = new JPanel();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                new Menu().setVisible(true);
+            }
+        });
+
         labelNroDiscos = new JLabel("Numero De Fichas");
         panelInferior.add(labelNroDiscos);
 
@@ -65,6 +73,7 @@ public class MainFrame extends JFrame {
 
                 hanoiPanel.pausarAnimacion();
                 botonIniciar.setText("Iniciar");
+                botonIniciar.setMnemonic('i');
                 labelInformacion.setVisible(false);
                 initializeDibujo();
                 remove(hanoiPanel);
@@ -77,6 +86,7 @@ public class MainFrame extends JFrame {
         panelInferior.add(spinnerNroDiscos);
 
         botonIniciar = new JButton("Iniciar");
+        botonIniciar.setMnemonic('i');
         if (gameMode == SOLUTIONER_MODE) {
             botonIniciar.addActionListener(new ActionListener() {
 
@@ -87,6 +97,7 @@ public class MainFrame extends JFrame {
 
                         hanoiPanel.pausarAnimacion();
                         botonIniciar.setText("Continuar");
+                        botonIniciar.setMnemonic('c');
                         spinnerNroDiscos.setEnabled(true);
                     } else {
 
@@ -95,6 +106,7 @@ public class MainFrame extends JFrame {
                             initializeDibujo();
                             add(hanoiPanel, BorderLayout.CENTER);
                             botonIniciar.setText("Iniciar");
+                            botonIniciar.setMnemonic('i');
                             labelInformacion.setVisible(true);
                             mainSetVisible(true);
                             spinnerNroDiscos.setEnabled(true);
@@ -102,6 +114,7 @@ public class MainFrame extends JFrame {
 
                             hanoiPanel.iniciarAnimacion();
                             botonIniciar.setText("Pausar");
+                            botonIniciar.setMnemonic('p');
                             spinnerNroDiscos.setEnabled(false);
                         }
                     }
@@ -109,9 +122,8 @@ public class MainFrame extends JFrame {
                 }
             });
         } else {
-            
         }
-        
+
         panelInferior.add(botonIniciar);
 
         labelInformacion = new JLabel("Terminado!");
@@ -134,6 +146,7 @@ public class MainFrame extends JFrame {
     public void resolucionCompletada() {
 
         botonIniciar.setText("Iniciar De Nuevo");
+        botonIniciar.setMnemonic('i');
         labelInformacion.setVisible(true);
     }
 
