@@ -57,6 +57,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
 
+            @Override
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 new Menu().setVisible(true);
             }
