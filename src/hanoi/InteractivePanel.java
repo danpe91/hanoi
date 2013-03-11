@@ -23,7 +23,6 @@ public class InteractivePanel extends MainPanel {
     private int torreDestino;
     private int ficha;
     private int paso;
-    private int nm;
     private int x;
     private int y;
     private int[] fichasEnTorre;
@@ -107,31 +106,36 @@ public class InteractivePanel extends MainPanel {
     private void initComponentesAnimacion() {
 
         addMouseListener(new java.awt.event.MouseAdapter() {
+
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
             }
 
             private void formMouseClicked(MouseEvent evt) {
-                
+
                 int xClicked = evt.getX();
                 int torre = getTorre(xClicked);
-                if ( torre != 0) {
-                     if (torreOrigen == 0) {
-                         torreOrigen = torre;
-                         
+
+                if (torre != 0) {
+
+                    if (torreOrigen == 0) {
+
+                        ficha = getFichaAMover(posiciones, torre);
+                        torreOrigen = torre;
+
                     } else {
-                         torreDestino = torre;
-                         movimiento = new Movimiento(ficha, torreOrigen, torreDestino);
-                         torreOrigen = 0;
-                         timer.restart();
-                     }
+                        torreDestino = torre;
+                        movimiento = new Movimiento(ficha, torreOrigen, torreDestino);
+                        torreOrigen = 0;
+                        timer.restart();
+                    }
                 }
-                
-                    
+
+
             }
         });
-        nm = 0;
+        
         fichasEnTorre = new int[LIMITE_TORRES + 1];
         fichasEnTorre[1] = noFichas;
         fichasEnTorre[2] = 0;
@@ -214,16 +218,35 @@ public class InteractivePanel extends MainPanel {
     }
 
     public int getTorre(int x) {
-        
-        if (x >= 45 && x <= 235)
+
+        if (x >= 40 && x <= 235) {
             return 1;
-        if (x >= 245 && x <= 435)
+        }
+        if (x >= 240 && x <= 435) {
             return 2;
-        if (x >= 445 && x <= 635)
+        }
+        if (x >= 440 && x <= 635) {
             return 3;
+        }
         return 0;
     }
-    
+
+    private int getFichaAMover(Posicion[] posiciones, int torreActual) {
+        
+        int fichaSuperior = 1, coordenadaDeFicha = 1000;
+        for (int i = 1; i <= noFichas; i++) {
+            
+            if (getTorre(posiciones[i].getX()) == torreActual && posiciones[i].getY() <= coordenadaDeFicha) {
+                
+                x = posiciones[i].getX();
+                coordenadaDeFicha = posiciones[i].getY();
+                fichaSuperior = i;
+            }
+        }
+        
+        return fichaSuperior;
+    }
+
     @Override
     public void iniciarAnimacion() {
 
