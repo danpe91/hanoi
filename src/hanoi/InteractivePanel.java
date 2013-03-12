@@ -116,26 +116,32 @@ public class InteractivePanel extends MainPanel {
 
                 int xClicked = evt.getX();
                 int torre = getTorre(xClicked);
+                int fichaSuperior;
 
                 if (torre != 0) {
 
                     if (torreOrigen == 0) {
 
-                        ficha = getFichaAMover(posiciones, torre);
+                        ficha = getFichaSuperior(posiciones, torre, true);
                         torreOrigen = torre;
 
                     } else {
                         torreDestino = torre;
-                        movimiento = new Movimiento(ficha, torreOrigen, torreDestino);
+                        fichaSuperior = getFichaSuperior(posiciones, torreDestino, false);
+                        
+                        if ( ficha <= fichaSuperior) {
+                            
+                            movimiento = new Movimiento(ficha, torreOrigen, torreDestino);
+                            timer.restart();
+                        }
                         torreOrigen = 0;
-                        timer.restart();
                     }
                 }
 
 
             }
         });
-        
+
         fichasEnTorre = new int[LIMITE_TORRES + 1];
         fichasEnTorre[1] = noFichas;
         fichasEnTorre[2] = 0;
@@ -231,19 +237,22 @@ public class InteractivePanel extends MainPanel {
         return 0;
     }
 
-    private int getFichaAMover(Posicion[] posiciones, int torreActual) {
-        
-        int fichaSuperior = 1, coordenadaDeFicha = 1000;
+    private int getFichaSuperior(Posicion[] posiciones, int torreActual, boolean edit) {
+
+        int fichaSuperior = 10, coordenadaDeFicha = 1000;
         for (int i = 1; i <= noFichas; i++) {
-            
+
             if (getTorre(posiciones[i].getX()) == torreActual && posiciones[i].getY() <= coordenadaDeFicha) {
-                
-                x = posiciones[i].getX();
+
+                if (edit) {
+                    x = posiciones[i].getX();
+                    y = posiciones[i].getY();
+                }
                 coordenadaDeFicha = posiciones[i].getY();
                 fichaSuperior = i;
             }
         }
-        
+
         return fichaSuperior;
     }
 
