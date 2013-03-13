@@ -6,6 +6,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /*
@@ -18,7 +21,6 @@ public class InteractivePanel extends MainPanel {
     private Movimiento movimiento;
     private Posicion[] posiciones;
     private boolean movimientoCompletado;
-    private int movimientoActual;
     private int torreOrigen;
     private int torreDestino;
     private int ficha;
@@ -79,25 +81,29 @@ public class InteractivePanel extends MainPanel {
                         break;
                 }
                 boolean stopTimer = false;
+                
                 if (movimientoCompletado) {
+                    
                     stopTimer = true;
                     paso = 1;
                     fichasEnTorre[movimiento.getTorreDestino()]++;
                     fichasEnTorre[movimiento.getTorreOrigen()]--;
-                    movimientoActual++;
-                    if (movimientoActual == (int) Math.pow(2, noFichas)) {
-                        timer.stop();
-                        mainFrame.resolucionCompletada();
-                    } else {
-                        movimientoCompletado = false;
-                        ficha = movimiento.getFicha();
-                        x = posiciones[ficha].getX();
-                        y = posiciones[ficha].getY();
-                    }
+                    movimientoCompletado = false;
+                    ficha = movimiento.getFicha();
+                    x = posiciones[ficha].getX();
+                    y = posiciones[ficha].getY();
                 }
                 repaint();
+                
                 if (stopTimer) {
+
                     timer.stop();
+                    if (verificarCompletado()) {
+
+                        mainFrame.resolucionCompletada();
+                        //Icon i = new ImageIcon(this.getClass().getResource("/images/" + "saurio" + ".png"));
+                        JOptionPane.showMessageDialog(null, "Has ganado mano!!!", "Felicidades!!!", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
         });
@@ -128,9 +134,9 @@ public class InteractivePanel extends MainPanel {
                     } else {
                         torreDestino = torre;
                         fichaSuperior = getFichaSuperior(posiciones, torreDestino, false);
-                        
-                        if ( ficha <= fichaSuperior) {
-                            
+
+                        if (ficha <= fichaSuperior && torreOrigen != torreDestino) {
+
                             movimiento = new Movimiento(ficha, torreOrigen, torreDestino);
                             timer.restart();
                         }
@@ -147,7 +153,7 @@ public class InteractivePanel extends MainPanel {
         fichasEnTorre[2] = 0;
         fichasEnTorre[3] = 0;
         ficha = 1;
-        //movimiento = new Movimiento[(int) Math.pow(2, noFichas)];
+
         posiciones = new Posicion[9];
         for (int i = 1; i <= noFichas; i++) {
             int w = noFichas - i + 1;
@@ -155,7 +161,6 @@ public class InteractivePanel extends MainPanel {
         }
         x = posiciones[1].getX();
         y = posiciones[1].getY();
-        movimientoActual = 1;
         movimientoCompletado = false;
         paso = 1;
     }
@@ -164,10 +169,12 @@ public class InteractivePanel extends MainPanel {
     public void paint(Graphics g) {
 
         super.paint(g);
+        setBackground(new Color(200, 200, 200));
         g.setColor(Color.RED);
         g.drawRect(25, 30, 625, 40);
         g.setColor(Color.BLUE);
         g.drawRect(25, 70, 625, 300);
+        
         for (int i = noFichas; i >= 1; i--) {
             g.drawImage(fichas[i], posiciones[i].getX(), posiciones[i].getY(), this);
         }
@@ -254,6 +261,12 @@ public class InteractivePanel extends MainPanel {
         }
 
         return fichaSuperior;
+    }
+
+    private boolean verificarCompletado() {
+
+        return fichasEnTorre[1] == 0 && fichasEnTorre[2] == 0 && fichasEnTorre[3] == noFichas;
+
     }
 
     @Override
