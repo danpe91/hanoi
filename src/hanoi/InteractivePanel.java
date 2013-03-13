@@ -28,12 +28,14 @@ public class InteractivePanel extends MainPanel {
     private int x;
     private int y;
     private int[] fichasEnTorre;
-
+    private int numeroDeMovimientos;
+    
     public InteractivePanel(final int noFichas, final int speed, final MainFrame mainFrame) {
 
         this.noFichas = noFichas;
         this.velocidad = speed;
-
+        this.numeroDeMovimientos = 0;
+        
         initComponentes();
         initComponentesAnimacion();
         timer = new Timer(VELOCIDAD, new ActionListener() {
@@ -107,6 +109,7 @@ public class InteractivePanel extends MainPanel {
                 }
             }
         });
+
     }
 
     private void initComponentesAnimacion() {
@@ -136,14 +139,14 @@ public class InteractivePanel extends MainPanel {
                         fichaSuperior = getFichaSuperior(posiciones, torreDestino, false);
 
                         if (ficha <= fichaSuperior && torreOrigen != torreDestino) {
-
+                               
+                            numeroDeMovimientos++;
                             movimiento = new Movimiento(ficha, torreOrigen, torreDestino);
                             timer.restart();
                         }
                         torreOrigen = 0;
                     }
                 }
-
 
             }
         });
@@ -169,6 +172,9 @@ public class InteractivePanel extends MainPanel {
     public void paint(Graphics g) {
 
         super.paint(g);
+        
+        g.drawString("Número de movimientos: " + Integer.toString(numeroDeMovimientos), getWidth() - 200, 20);
+        
         setBackground(new Color(200, 200, 200));
         g.setColor(Color.RED);
         g.drawRect(25, 30, 625, 40);
