@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,6 +25,10 @@ public class MainFrame extends JFrame {
     public static final int SOLUTIONER_MODE = 0;
     public static final int INTERACTIVE_MODE = 1;
     private final int VELOCIDAD = 10;
+    private final int LIMITE_INFERIOR_SOLUCIONADOR = 4;
+    private final int LIMITE_SUPERIOR_SOLUCIONADOR = 7;
+    private final int LIMITE_INFERIOR_USUARIO = 3;
+    private final int LIMITE_SUPERIOR_USUARIO = 6;
     private int gameMode;
     private JSpinner spinnerNroDiscos;
     private JLabel labelInformacion;
@@ -134,9 +139,10 @@ public class MainFrame extends JFrame {
 
 
         add(panelInferior, BorderLayout.SOUTH);
+        
         hanoiPanel = (gameMode == SOLUTIONER_MODE)
-                ? new HanoiPanel(8, VELOCIDAD, this)
-                : new InteractivePanel(8, VELOCIDAD, this);
+                ? new HanoiPanel((new Random().nextInt(LIMITE_SUPERIOR_SOLUCIONADOR + 1 - LIMITE_INFERIOR_SOLUCIONADOR) + LIMITE_INFERIOR_SOLUCIONADOR), VELOCIDAD, this)
+                : new InteractivePanel((new Random().nextInt(LIMITE_SUPERIOR_USUARIO + 1 - LIMITE_INFERIOR_USUARIO) + LIMITE_INFERIOR_USUARIO), VELOCIDAD, this);
 
         add(hanoiPanel, BorderLayout.CENTER);
 
