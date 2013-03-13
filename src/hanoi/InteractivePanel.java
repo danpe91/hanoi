@@ -18,9 +18,11 @@ import javax.swing.Timer;
 public class InteractivePanel extends MainPanel {
 
     private Timer timer;
+    private Timer timer2;   // Cuenta el tiempo en solucionar
     private Movimiento movimiento;
     private Posicion[] posiciones;
     private boolean movimientoCompletado;
+    private long tiempo;
     private int torreOrigen;
     private int torreDestino;
     private int ficha;
@@ -35,6 +37,7 @@ public class InteractivePanel extends MainPanel {
         this.noFichas = noFichas;
         this.velocidad = speed;
         this.numeroDeMovimientos = 0;
+        this.tiempo = 0;
         
         initComponentes();
         initComponentesAnimacion();
@@ -103,12 +106,25 @@ public class InteractivePanel extends MainPanel {
                     if (verificarCompletado()) {
 
                         mainFrame.resolucionCompletada();
+                        System.out.println(tiempo);
                         //Icon i = new ImageIcon(this.getClass().getResource("/images/" + "saurio" + ".png"));
-                        JOptionPane.showMessageDialog(null, "Has ganado mano!!!", "Felicidades!!!", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Has ganado mano!!!\nNúmero de movimientos: " + Integer.toString(numeroDeMovimientos), "Felicidades!!!", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
         });
+        
+        timer2 = new Timer(1000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                tiempo++;
+                
+            }
+        });
+        
+        timer2.start();
 
     }
 
