@@ -52,7 +52,8 @@ public class Puntaje implements Comparable<Puntaje> {
     @Override
     public int compareTo(Puntaje o) {
 
-        return this.porMovimientos ? this.movimientos - o.movimientos
+        return this.porMovimientos ? this.movimientos - o.movimientos == 0 ? (int) (this.tiempo - o.tiempo)
+                : (int) (this.movimientos - o.movimientos)
                 : (int) (this.tiempo - o.tiempo);
     }
 }

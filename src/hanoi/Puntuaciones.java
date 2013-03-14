@@ -1,5 +1,6 @@
 package hanoi;
 
+import java.util.Collections;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -240,7 +241,8 @@ private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     int numerDeDiscosDeseado = Integer.parseInt(numeroDiscosComboBox.getSelectedItem().toString());
     java.util.List<Puntaje> lista;
     lista = ScoresIO.leer(numerDeDiscosDeseado, true);
-    
+
+    Collections.sort(lista);
     llenarTabla(lista, movimientosTable);
 }//GEN-LAST:event_acceptButtonActionPerformed
 
@@ -250,6 +252,7 @@ private void acceptTiempoButtonActionPerformed(java.awt.event.ActionEvent evt) {
     java.util.List<Puntaje> lista;
     lista = ScoresIO.leer(numerDeDiscosDeseado, false);
     
+    Collections.sort(lista);
     llenarTabla(lista, tiemposTable);
 }//GEN-LAST:event_acceptTiempoButtonActionPerformed
 

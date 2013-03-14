@@ -62,7 +62,7 @@ public class MainFrame extends JFrame {
 
             @Override
             public void windowClosed(java.awt.event.WindowEvent evt) {
-                
+
                 sonido.stop();
                 audioThread.stop();
                 new Menu().setVisible(true);
@@ -106,6 +106,7 @@ public class MainFrame extends JFrame {
             });
         } else {
 
+            botonIniciar.setText("Salir");
             botonIniciar.addActionListener(new ActionListener() {
 
                 @Override
@@ -140,7 +141,7 @@ public class MainFrame extends JFrame {
             @Override
             public void run() {
                 try {
-                    
+
                     sonido = AudioSystem.getClip();
                     File file = new File("src/files/spelunk.aiff");
                     sonido.open(AudioSystem.getAudioInputStream(file));
@@ -157,7 +158,10 @@ public class MainFrame extends JFrame {
 
     public void resolucionCompletada() {
 
-        botonIniciar.setText("Iniciar De Nuevo");
+        if (gameMode == SOLUTIONER_MODE) {
+            botonIniciar.setText("Iniciar De Nuevo");
+        }
+
         botonIniciar.setMnemonic('i');
         labelInformacion.setVisible(true);
     }

@@ -6,9 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /*
@@ -106,9 +103,8 @@ public class InteractivePanel extends MainPanel {
                     if (verificarCompletado()) {
 
                         mainFrame.resolucionCompletada();
-                        System.out.println(tiempo);
                         //Icon i = new ImageIcon(this.getClass().getResource("/images/" + "saurio" + ".png"));
-                        JOptionPane.showMessageDialog(null, "Has ganado mano!!!\nNúmero de movimientos: " + Integer.toString(numeroDeMovimientos), "Felicidades!!!", JOptionPane.INFORMATION_MESSAGE);
+                        new EndingScore(numeroDeMovimientos, tiempo, noFichas).setVisible(true);
                     }
                 }
             }
