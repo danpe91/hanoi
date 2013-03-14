@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Random;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +32,8 @@ public class MainFrame extends JFrame {
     private JLabel labelInformacion;
     private JButton botonIniciar;
     private MainPanel hanoiPanel;
+    private Clip sonido;
+    private Thread audioThread;
 
     public MainFrame(int gameMode) {
 
@@ -58,6 +63,9 @@ public class MainFrame extends JFrame {
 
             @Override
             public void windowClosed(java.awt.event.WindowEvent evt) {
+                
+                sonido.stop();
+                audioThread.stop();
                 new Menu().setVisible(true);
             }
         });
@@ -65,7 +73,7 @@ public class MainFrame extends JFrame {
         botonIniciar = new JButton((gameMode == SOLUTIONER_MODE) ? "Iniciar" : "Salir");
         botonIniciar.setMnemonic('i');
         if (gameMode == SOLUTIONER_MODE) {
-            
+
             botonIniciar.addActionListener(new ActionListener() {
 
                 @Override
@@ -98,16 +106,16 @@ public class MainFrame extends JFrame {
                 }
             });
         } else {
-            
+
             botonIniciar.addActionListener(new ActionListener() {
 
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    
+
                     dispose();
                 }
             });
-            
+
         }
 
         panelInferior.add(botonIniciar);
@@ -127,6 +135,24 @@ public class MainFrame extends JFrame {
         add(hanoiPanel, BorderLayout.CENTER);
 
         getRootPane().setDefaultButton(botonIniciar);
+
+        audioThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    
+                    sonido = AudioSystem.getClip();
+                    File file = new File("src/files/spelunk.aiff");
+                    sonido.open(AudioSystem.getAudioInputStream(file));
+                    sonido.loop(Clip.LOOP_CONTINUOUSLY);
+                } catch (Exception e) {
+                    System.out.println("Ha ocurrido un error con el sonido.");
+                }
+            }
+        });
+
+        audioThread.start();
 
     }
 
