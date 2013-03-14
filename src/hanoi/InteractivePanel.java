@@ -31,14 +31,14 @@ public class InteractivePanel extends MainPanel {
     private int y;
     private int[] fichasEnTorre;
     private int numeroDeMovimientos;
-    
+
     public InteractivePanel(final int noFichas, final int speed, final MainFrame mainFrame) {
 
         this.noFichas = noFichas;
         this.velocidad = speed;
         this.numeroDeMovimientos = 0;
         this.tiempo = 0;
-        
+
         initComponentes();
         initComponentesAnimacion();
         timer = new Timer(VELOCIDAD, new ActionListener() {
@@ -86,9 +86,9 @@ public class InteractivePanel extends MainPanel {
                         break;
                 }
                 boolean stopTimer = false;
-                
+
                 if (movimientoCompletado) {
-                    
+
                     stopTimer = true;
                     paso = 1;
                     fichasEnTorre[movimiento.getTorreDestino()]++;
@@ -99,7 +99,7 @@ public class InteractivePanel extends MainPanel {
                     y = posiciones[ficha].getY();
                 }
                 repaint();
-                
+
                 if (stopTimer) {
 
                     timer.stop();
@@ -113,17 +113,17 @@ public class InteractivePanel extends MainPanel {
                 }
             }
         });
-        
+
         timer2 = new Timer(1000, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                
+
                 tiempo++;
-                
+
             }
         });
-        
+
         timer2.start();
 
     }
@@ -155,9 +155,22 @@ public class InteractivePanel extends MainPanel {
                         fichaSuperior = getFichaSuperior(posiciones, torreDestino, false);
 
                         if (ficha <= fichaSuperior && torreOrigen != torreDestino) {
-                               
+
                             numeroDeMovimientos++;
                             movimiento = new Movimiento(ficha, torreOrigen, torreDestino);
+                            if (movimiento.getTorreDestino() == 1) {
+                                palitoFinal1 = palito2;
+                                palitoFinal2 = palito;
+                                palitoFinal3 = palito;
+                            } else if (movimiento.getTorreDestino() == 2) {
+                                palitoFinal2 = palito2;
+                                palitoFinal1 = palito;
+                                palitoFinal3 = palito;
+                            } else if (movimiento.getTorreDestino() == 3) {
+                                palitoFinal3 = palito2;
+                                palitoFinal1 = palito;
+                                palitoFinal2 = palito;
+                            }
                             timer.restart();
                         }
                         torreOrigen = 0;
@@ -188,25 +201,23 @@ public class InteractivePanel extends MainPanel {
     public void paint(Graphics g) {
 
         super.paint(g);
-        
+
         g.drawString("Número de movimientos: " + Integer.toString(numeroDeMovimientos), getWidth() - 200, 20);
-        
-        setBackground(new Color(200, 200, 200));
-        g.setColor(Color.RED);
-        g.drawRect(25, 30, 625, 40);
-        g.setColor(Color.BLUE);
-        g.drawRect(25, 70, 625, 300);
-        
+
+        setBackground(Color.DARK_GRAY);
+        g.drawImage(background, 25, 70, this);
+        g.drawImage(palitoFinal1, 45, 78, this);
+        g.drawImage(palitoFinal2, 245, 78, this);
+        g.drawImage(palitoFinal3, 445, 78, this);
+
         for (int i = noFichas; i >= 1; i--) {
             g.drawImage(fichas[i], posiciones[i].getX(), posiciones[i].getY(), this);
         }
 
-        g.setColor(Color.RED);
+        g.setColor(Color.WHITE);
         g.setFont(new java.awt.Font("Bitstream Charter", 1, 16));
         g.drawString("Origen", 115, 350);
-        g.setColor(Color.BLUE);
         g.drawString("Auxiliar", 315, 350);
-        g.setColor(Color.GREEN);
         g.drawString("Destino", 515, 350);
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
@@ -286,6 +297,10 @@ public class InteractivePanel extends MainPanel {
     }
 
     private boolean verificarCompletado() {
+
+        palitoFinal1 = palito;
+        palitoFinal2 = palito;
+        palitoFinal3 = palito;
 
         return fichasEnTorre[1] == 0 && fichasEnTorre[2] == 0 && fichasEnTorre[3] == noFichas;
 

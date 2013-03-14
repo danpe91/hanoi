@@ -122,20 +122,21 @@ public class HanoiPanel extends MainPanel {
     public void paint(Graphics g) {
 
         super.paint(g);
-        g.setColor(Color.RED);
-        g.drawRect(25, 30, 625, 40);
-        g.setColor(Color.BLUE);
-        g.drawRect(25, 70, 625, 300);
+        
+        setBackground(Color.DARK_GRAY);
+        g.drawImage(background, 25, 70, this);
+        g.drawImage(palitoFinal1, 45, 78, this);
+        g.drawImage(palitoFinal2, 245, 78, this);
+        g.drawImage(palitoFinal3, 445, 78, this);
+
         for (int i = noFichas; i >= 1; i--) {
             g.drawImage(fichas[i], posiciones[i].getX(), posiciones[i].getY(), this);
         }
 
-        g.setColor(Color.RED);
+        g.setColor(Color.WHITE);
         g.setFont(new java.awt.Font("Bitstream Charter", 1, 16));
         g.drawString("Origen", 115, 350);
-        g.setColor(Color.BLUE);
         g.drawString("Auxiliar", 315, 350);
-        g.setColor(Color.GREEN);
         g.drawString("Destino", 515, 350);
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
