@@ -24,7 +24,7 @@ public abstract class MainPanel extends javax.swing.JPanel {
 
         fichas = new Image[LIMITE_FICHAS + 1];
         for (int i = 1; i <= LIMITE_FICHAS; i++) {
-            ImageIcon ii = new ImageIcon(this.getClass().getResource("/images/" + i + ".png"));
+            ImageIcon ii = new ImageIcon(this.getClass().getResource("/files/" + i + ".png"));
             fichas[i] = ii.getImage();
         }
     }
