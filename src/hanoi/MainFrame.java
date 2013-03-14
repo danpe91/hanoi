@@ -9,11 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /*
  * Clase que crea la ventana con los componentes swing necesarios
@@ -24,15 +20,13 @@ public class MainFrame extends JFrame {
 
     public static final int SOLUTIONER_MODE = 0;
     public static final int INTERACTIVE_MODE = 1;
-    private final int VELOCIDAD = 10;
     private final int LIMITE_INFERIOR_SOLUCIONADOR = 4;
     private final int LIMITE_SUPERIOR_SOLUCIONADOR = 7;
     private final int LIMITE_INFERIOR_USUARIO = 3;
     private final int LIMITE_SUPERIOR_USUARIO = 6;
+    private final int VELOCIDAD = 10;
     private int gameMode;
-    private JSpinner spinnerNroDiscos;
     private JLabel labelInformacion;
-    private JLabel labelNroDiscos;
     private JButton botonIniciar;
     private MainPanel hanoiPanel;
 
@@ -68,32 +62,10 @@ public class MainFrame extends JFrame {
             }
         });
 
-        labelNroDiscos = new JLabel("Numero De Fichas");
-        panelInferior.add(labelNroDiscos);
-
-        spinnerNroDiscos = new JSpinner(new SpinnerNumberModel(8, 1, 8, 1));
-        spinnerNroDiscos.addChangeListener(new ChangeListener() {
-
-            @Override
-            public void stateChanged(ChangeEvent ce) {
-
-                hanoiPanel.pausarAnimacion();
-                botonIniciar.setText("Iniciar");
-                botonIniciar.setMnemonic('i');
-                labelInformacion.setVisible(false);
-                initializeDibujo();
-                remove(hanoiPanel);
-                add(hanoiPanel, BorderLayout.CENTER);
-                mainSetVisible(true);
-
-            }
-        });
-
-        panelInferior.add(spinnerNroDiscos);
-
-        botonIniciar = new JButton("Iniciar");
+        botonIniciar = new JButton((gameMode == SOLUTIONER_MODE) ? "Iniciar" : "Salir");
         botonIniciar.setMnemonic('i');
         if (gameMode == SOLUTIONER_MODE) {
+            
             botonIniciar.addActionListener(new ActionListener() {
 
                 @Override
@@ -104,7 +76,6 @@ public class MainFrame extends JFrame {
                         hanoiPanel.pausarAnimacion();
                         botonIniciar.setText("Continuar");
                         botonIniciar.setMnemonic('c');
-                        spinnerNroDiscos.setEnabled(true);
                     } else {
 
                         if (botonIniciar.getText().equals("Iniciar De Nuevo")) {
@@ -115,19 +86,28 @@ public class MainFrame extends JFrame {
                             botonIniciar.setMnemonic('i');
                             labelInformacion.setVisible(true);
                             mainSetVisible(true);
-                            spinnerNroDiscos.setEnabled(true);
+
                         } else {
 
                             hanoiPanel.iniciarAnimacion();
                             botonIniciar.setText("Pausar");
                             botonIniciar.setMnemonic('p');
-                            spinnerNroDiscos.setEnabled(false);
                         }
                     }
 
                 }
             });
         } else {
+            
+            botonIniciar.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    
+                    dispose();
+                }
+            });
+            
         }
 
         panelInferior.add(botonIniciar);
@@ -139,7 +119,7 @@ public class MainFrame extends JFrame {
 
 
         add(panelInferior, BorderLayout.SOUTH);
-        
+
         hanoiPanel = (gameMode == SOLUTIONER_MODE)
                 ? new HanoiPanel((new Random().nextInt(LIMITE_SUPERIOR_SOLUCIONADOR + 1 - LIMITE_INFERIOR_SOLUCIONADOR) + LIMITE_INFERIOR_SOLUCIONADOR), VELOCIDAD, this)
                 : new InteractivePanel((new Random().nextInt(LIMITE_SUPERIOR_USUARIO + 1 - LIMITE_INFERIOR_USUARIO) + LIMITE_INFERIOR_USUARIO), VELOCIDAD, this);
@@ -159,9 +139,8 @@ public class MainFrame extends JFrame {
 
     private void initializeDibujo() {
 
-        hanoiPanel = (gameMode == SOLUTIONER_MODE)
-                ? new HanoiPanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this)
-                : new InteractivePanel(Integer.parseInt(spinnerNroDiscos.getValue().toString()), VELOCIDAD, this);
+        hanoiPanel = new HanoiPanel(hanoiPanel.noFichas, VELOCIDAD, this);
+        labelInformacion.setText("");
     }
 
     private void mainSetVisible(boolean flag) {
