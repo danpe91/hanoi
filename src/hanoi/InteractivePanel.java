@@ -198,6 +198,7 @@ public class InteractivePanel extends MainPanel {
 
         super.paint(g);
 
+        g.setColor(Color.WHITE);
         g.drawString("Número de movimientos: " + Integer.toString(numeroDeMovimientos), getWidth() - 200, 20);
 
         setBackground(Color.DARK_GRAY);

@@ -11,6 +11,7 @@ public class Puntuaciones extends javax.swing.JFrame {
 
         setLookAndFeel();
         initComponents();
+        getRootPane().setDefaultButton(acceptButton);
         
     }
 

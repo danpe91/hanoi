@@ -29,17 +29,19 @@ public class MainFrame extends JFrame {
     private final int LIMITE_SUPERIOR_USUARIO = 6;
     private final int VELOCIDAD = 10;
     private int gameMode;
+    private int numDeDiscos;
     private JLabel labelInformacion;
     private JButton botonIniciar;
     private MainPanel hanoiPanel;
     private Clip sonido;
     private Thread audioThread;
 
-    public MainFrame(int gameMode) {
+    public MainFrame(int gameMode, int numDeDiscos) {
 
         super("Inteligencia Artificial - Proyecto: Torres de Hanoi ");
 
         this.gameMode = gameMode;
+        this.numDeDiscos = numDeDiscos;
         configurarVentana();
         inicializarComponentes();
     }
@@ -130,7 +132,7 @@ public class MainFrame extends JFrame {
 
         hanoiPanel = (gameMode == SOLUTIONER_MODE)
                 ? new HanoiPanel((new Random().nextInt(LIMITE_SUPERIOR_SOLUCIONADOR + 1 - LIMITE_INFERIOR_SOLUCIONADOR) + LIMITE_INFERIOR_SOLUCIONADOR), VELOCIDAD, this)
-                : new InteractivePanel((new Random().nextInt(LIMITE_SUPERIOR_USUARIO + 1 - LIMITE_INFERIOR_USUARIO) + LIMITE_INFERIOR_USUARIO), VELOCIDAD, this);
+                : new InteractivePanel(numDeDiscos, VELOCIDAD, this);
 
         add(hanoiPanel, BorderLayout.CENTER);
 
